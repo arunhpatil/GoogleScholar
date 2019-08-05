@@ -5,4 +5,4 @@ Simple API that parses information from https://scholar.google.se/citations. The
 
 Example: <a href="http://www.inhouseprotocols.com/publications.php" target="_blank">qubfVSkAAAAJ</a>
 
-Acknowledgements: 	I thank Mr. Shashanka G. Koyangana, for his inputs and revisions.
+Acknowledgements: 	I thank <a href="https://github.com/shashankgk" target="_blank">Mr. Shashanka G. Koyangana</a>, for his inputs and revisions.
