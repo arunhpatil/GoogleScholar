@@ -21,7 +21,7 @@
 	return $c;
 }*/
 
-$user="qubfVSkAAAAJ";
+#$user="qubfVSkAAAAJ";
 #if(!isset($_GET["user"]))
 	#exit -1;
 
@@ -29,32 +29,39 @@ $user="qubfVSkAAAAJ";
 include('simple_html_dom.php');
 $html = new simple_html_dom();
 #$html->load_file("http://scholar.google.se/citations?user=" . $_GET["user"]);
+#Users need to change the value user=qubfVSkAAAAJ to corresponding scholar ID user=????????????
 $html->load_file("https://scholar.google.com/citations?hl=en&user=qubfVSkAAAAJ");
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st td.gsc_rsb_std", 0)->plaintext . ",\n";
-
     $Cit_A=$html->find("#gsc_rsb_st td.gsc_rsb_std", 0)->plaintext;
-
+    #Cit_A, Number of citations over "All" years
+	
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st td.gsc_rsb_std", 1)->plaintext . ",\n";
     $Cit_B=$html->find("#gsc_rsb_st td.gsc_rsb_std", 1)->plaintext;
-    
+    #Cit_B, Number of citations from year "yyyy"
+	
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st td.gsc_rsb_std", 2)->plaintext . ",\n";
     $hindex_A=$html->find("#gsc_rsb_st td.gsc_rsb_std", 2)->plaintext;
-    
+    #$hindex_A, collects variable for h-index value calculated over "All" years
+	
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st td.gsc_rsb_std", 3)->plaintext . ",\n";
     $hindex_B=$html->find("#gsc_rsb_st td.gsc_rsb_std", 3)->plaintext;
+    #$hindex_B, collects variable for h-index value calculated from year "yyyy"
     
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st td.gsc_rsb_std", 4)->plaintext . ",\n";
     $i10_inex_A=$html->find("#gsc_rsb_st td.gsc_rsb_std", 4)->plaintext;
-    
+    #i10_index_A, collects variable for i10 index value calculated over "All" years
+	
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st td.gsc_rsb_std", 5)->plaintext . ",\n";
     $i10_inex_B=$html->find("#gsc_rsb_st td.gsc_rsb_std", 4)->plaintext;
-
+    #i10_index_B, collects variable for i10 index value calculated from year "yyyy"
+	
 #print "{\n \"Arun\": " . $html->find("#gsc_rsb_st th.gsc_rsb_sth", 1)->plaintext . ",\n";
     $header_A=$html->find("#gsc_rsb_st th.gsc_rsb_sth", 1)->plaintext;
-
+    #$header_A: It is the header value which equals "All"
+	
 #print "{\n \"total_citations\": " . $html->find("#gsc_rsb_st th.gsc_rsb_sth", 2)->plaintext . ",\n";
     $header_B=$html->find("#gsc_rsb_st th.gsc_rsb_sth", 2)->plaintext;
-
+    #$header_B: It is the header value which is variable for every user. This describes the score cut-off starting from the year "yyyy". 
 
 $s = " \"citations_per_year\": {";
 $years = $html->find('.gsc_g_t');
@@ -64,16 +71,19 @@ foreach($scores as $key => $score) {
 	$s .= "\n  \"" . $years[$key]->plaintext ."\": ". $score->plaintext . ",";
 	
 	#echo $years[$key]->plaintext;
-	
+	#Append the years (x-axis) as list variable in $labels array
 	$labels .= $years[$key]->plaintext.",";
+	#Append the citations (data points) as list variable in $data array
 	$data .= $score->plaintext.",";
-	
+	#$labels and $data is passed to Java script for plotting interactive line chart
 }
-#print substr($s, 0, -1) . "\n },\n";
+#Prints the array of citations per year. Since it is displayed in JS-based line chart, you may comment the below line to hide/avoid printing.  
+print substr($s, 0, -1) . "\n },\n";
 
 
-
-/*
+#The following loop prints top 20 cited journal articles. 
+#This following loop is commented and not used in the example http://www.inhouseprotocols.com/publications.php  
+#To comment the entire loop/block type /* from start of the loop and  */ at the end of the loop.
 $str = " \"publications\": [";
 foreach($html->find("#gsc_a_t .gsc_a_tr") as $pub) {
 	$str .= "\n  {\n    \"title\": \"" . $pub->find(".gsc_a_at", 0)->plaintext;
@@ -89,7 +99,7 @@ foreach($html->find("#gsc_a_t .gsc_a_tr") as $pub) {
 		$str .= ",\n    \"year\": " . $pub->find(".gsc_a_h", 0)->plaintext;
 	$str .= "\n  },";
 }
-print substr($str, 0, -1) . "\n ]\n}";*/
+print substr($str, 0, -1) . "\n ]\n}";
 
 ?>
 
